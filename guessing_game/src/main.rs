@@ -30,7 +30,16 @@ fn main() {
         println!("You guessed (guess is a string): {}", guess);
 
         // parse the string input into a unsigned 32-bit integer, raise an error if it can't be parsed into a u32
-        let guess: u32 = guess.trim().parse().expect("Please type a number!");
+
+        // We switch from an expect call to a match expression to move from crashing on an error to handling the error
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => {
+                println!("Please try again with a whole positive number... secret is {the_secret_number}");
+                continue;
+            }
+        };
+
         // Rust allows us to shadow the previous value of guess with a new one.
         // Shadowing lets us reuse the guess variable name rather than forcing us to create two unique variables, such as guess_str and guess, for example.
         // For now, know that this feature is often used when you want to convert a value from one type to another type.
